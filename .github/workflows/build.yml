@@ -289,6 +289,18 @@ jobs:
         source emsdk-master/emsdk_env.sh
         make -C examples/example_emscripten
 
+  Android:
+    runs-on: ubuntu-18.04
+    steps:
+    - uses: actions/checkout@v1
+      with:
+        fetch-depth: 1
+
+    - name: Build example_android_opengl3
+      run: |
+        cd examples/example_android_opengl3
+        ./build_android.sh
+
   Static-Analysis:
     runs-on: ubuntu-18.04
     steps:
