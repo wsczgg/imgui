@@ -2003,6 +2003,7 @@ struct ImGuiTable
         LastResizedColumn = -1;
         ContextPopupColumn = -1;
         ReorderColumn = -1;
+        ResizedColumn = -1;
     }
 };
 
@@ -2014,7 +2015,7 @@ struct ImGuiTableColumnSettings
     ImS8    Index;
     ImS8    DisplayOrder;
     ImS8    SortOrder;
-    ImS8    SortDirection : 7;
+    ImU8    SortDirection : 2;
     ImU8    Visible : 1;
 
     ImGuiTableColumnSettings()
