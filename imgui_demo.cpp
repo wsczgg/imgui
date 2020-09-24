@@ -3470,7 +3470,7 @@ static void ShowDemoWindowTables()
             ImGui::TableSetupColumn("AAA", ImGuiTableColumnFlags_WidthFixed);// | ImGuiTableColumnFlags_NoResize);
             ImGui::TableSetupColumn("BBB", ImGuiTableColumnFlags_WidthFixed);
             ImGui::TableSetupColumn("CCC", ImGuiTableColumnFlags_WidthStretch);
-            ImGui::TableAutoHeaders();
+            ImGui::TableHeadersRow();
             for (int row = 0; row < 5; row++)
             {
                 ImGui::TableNextRow();
@@ -3490,7 +3490,7 @@ static void ShowDemoWindowTables()
             ImGui::TableSetupColumn("DDD", ImGuiTableColumnFlags_WidthStretch);
             ImGui::TableSetupColumn("EEE", ImGuiTableColumnFlags_WidthStretch);
             ImGui::TableSetupColumn("FFF", ImGuiTableColumnFlags_WidthStretch | ImGuiTableColumnFlags_DefaultHide);
-            ImGui::TableAutoHeaders();
+            ImGui::TableHeadersRow();
             for (int row = 0; row < 5; row++)
             {
                 ImGui::TableNextRow();
@@ -3517,12 +3517,12 @@ static void ShowDemoWindowTables()
 
         if (ImGui::BeginTable("##table1", 3, flags))
         {
-            // Submit columns name with TableSetupColumn() and call TableAutoHeaders() to create a row with a header in each column.
+            // Submit columns name with TableSetupColumn() and call TableHeadersRow() to create a row with a header in each column.
             // (Later we will show how TableSetupColumn() has other uses, optional flags, sizing weight etc.)
             ImGui::TableSetupColumn("One");
             ImGui::TableSetupColumn("Two");
             ImGui::TableSetupColumn("Three");
-            ImGui::TableAutoHeaders();
+            ImGui::TableHeadersRow();
             for (int row = 0; row < 6; row++)
             {
                 ImGui::TableNextRow();
@@ -3540,7 +3540,7 @@ static void ShowDemoWindowTables()
             ImGui::TableSetupColumn("One");
             ImGui::TableSetupColumn("Two");
             ImGui::TableSetupColumn("Three");
-            ImGui::TableAutoHeaders();
+            ImGui::TableHeadersRow();
             for (int row = 0; row < 6; row++)
             {
                 ImGui::TableNextRow();
@@ -3596,7 +3596,7 @@ static void ShowDemoWindowTables()
             ImGui::TableSetupColumn("One", ImGuiTableColumnFlags_None);
             ImGui::TableSetupColumn("Two", ImGuiTableColumnFlags_None);
             ImGui::TableSetupColumn("Three", ImGuiTableColumnFlags_None);
-            ImGui::TableAutoHeaders();
+            ImGui::TableHeadersRow();
             ImGuiListClipper clipper;
             clipper.Begin(1000);
             while (clipper.Step())
@@ -3641,7 +3641,7 @@ static void ShowDemoWindowTables()
             ImGui::TableSetupColumn("Four", ImGuiTableColumnFlags_None);
             ImGui::TableSetupColumn("Five", ImGuiTableColumnFlags_None);
             ImGui::TableSetupColumn("Six", ImGuiTableColumnFlags_None);
-            ImGui::TableAutoHeaders();
+            ImGui::TableHeadersRow();
             for (int row = 0; row < 20; row++)
             {
                 ImGui::TableNextRow();
@@ -3707,7 +3707,7 @@ static void ShowDemoWindowTables()
         {
             for (int column = 0; column < column_count; column++)
                 ImGui::TableSetupColumn(column_names[column], column_flags[column]);
-            ImGui::TableAutoHeaders();
+            ImGui::TableHeadersRow();
             for (int row = 0; row < 8; row++)
             {
                 ImGui::Indent(2.0f); // Add some indentation to demonstrate usage of per-column IndentEnable/IndentDisable flags.
@@ -3735,7 +3735,7 @@ static void ShowDemoWindowTables()
         {
             ImGui::TableSetupColumn("A0");
             ImGui::TableSetupColumn("A1");
-            ImGui::TableAutoHeaders();
+            ImGui::TableHeadersRow();
 
             ImGui::TableNextRow();  ImGui::Text("A0 Cell 0");
             {
@@ -3744,7 +3744,7 @@ static void ShowDemoWindowTables()
                 {
                     ImGui::TableSetupColumn("B0");
                     ImGui::TableSetupColumn("B1");
-                    ImGui::TableAutoHeaders();
+                    ImGui::TableHeadersRow();
 
                     ImGui::TableNextRow(ImGuiTableRowFlags_None, rows_height);
                     ImGui::Text("B0 Cell 0");
@@ -3947,7 +3947,7 @@ static void ShowDemoWindowTables()
             ImGui::TableSetupColumn("Name", ImGuiTableColumnFlags_NoHide);
             ImGui::TableSetupColumn("Size", ImGuiTableColumnFlags_WidthFixed, ImGui::GetFontSize() * 6);
             ImGui::TableSetupColumn("Type", ImGuiTableColumnFlags_WidthFixed, ImGui::GetFontSize() * 10);
-            ImGui::TableAutoHeaders();
+            ImGui::TableHeadersRow();
 
             // Simple storage to output a dummy file-system.
             struct MyTreeNode
@@ -4005,7 +4005,7 @@ static void ShowDemoWindowTables()
         ImGui::TreePop();
     }
 
-    // Demonstrate using TableHeader() calls instead of TableAutoHeaders()
+    // Demonstrate using TableHeader() calls instead of TableHeadersRow()
     if (open_action != -1)
         ImGui::SetNextItemOpen(open_action != 0);
     if (ImGui::TreeNode("Custom headers"))
@@ -4021,7 +4021,7 @@ static void ShowDemoWindowTables()
             // FIXME: It would be nice to actually demonstrate full-featured selection using those checkbox.
             static bool column_selected[3] = {};
 
-            // Instead of calling TableAutoHeaders() we'll submit custom headers ourselves
+            // Instead of calling TableHeadersRow() we'll submit custom headers ourselves
             ImGui::TableNextRow(ImGuiTableRowFlags_Headers);
             for (int column = 0; column < COLUMNS_COUNT; column++)
             {
@@ -4052,12 +4052,12 @@ static void ShowDemoWindowTables()
         ImGui::TreePop();
     }
 
-    // Demonstrate creating custom context menus inside columns, while playing it nice with context menus provided by TableHeader()/TableAutoHeaders()
+    // Demonstrate creating custom context menus inside columns, while playing it nice with context menus provided by TableHeadersRow()/TableHeader()
     if (open_action != -1)
         ImGui::SetNextItemOpen(open_action != 0);
     if (ImGui::TreeNode("Context menus"))
     {
-        HelpMarker("By default, TableHeader()/TableAutoHeaders() will open a context-menu on right-click.");
+        HelpMarker("By default, TableHeadersRow()/TableHeader() will open a context-menu on right-click.");
         ImGuiTableFlags flags = ImGuiTableFlags_Resizable | ImGuiTableFlags_SizingPolicyFixedX | ImGuiTableFlags_Reorderable | ImGuiTableFlags_Hideable | ImGuiTableFlags_Borders;
         const int COLUMNS_COUNT = 3;
         if (ImGui::BeginTable("##table1", COLUMNS_COUNT, flags))
@@ -4067,7 +4067,7 @@ static void ShowDemoWindowTables()
             ImGui::TableSetupColumn("Three");
 
             // Context Menu 1: right-click on header (including empty section after the third column!) should open Default Table Popup
-            ImGui::TableAutoHeaders();
+            ImGui::TableHeadersRow();
             for (int row = 0; row < 4; row++)
             {
                 ImGui::TableNextRow();
@@ -4176,7 +4176,7 @@ static void ShowDemoWindowTables()
                 }
 
             // Display data
-            ImGui::TableAutoHeaders();
+            ImGui::TableHeadersRow();
             ImGuiListClipper clipper;
             clipper.Begin(items.Size);
             while (clipper.Step())
@@ -4365,7 +4365,7 @@ static void ShowDemoWindowTables()
 
             // Show headers
             if (show_headers)
-                ImGui::TableAutoHeaders();
+                ImGui::TableHeadersRow();
 
             // Show data
             // FIXME-TABLE FIXME-NAV: How we can get decent up/down even though we have the buttons here?
