@@ -2110,6 +2110,7 @@ struct ImGuiListClipper
 
     // [Internal]
     int     StepNo;
+    int     ItemsFrozen;
     float   ItemsHeight;
     float   StartPosY;
 

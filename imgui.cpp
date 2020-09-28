@@ -2215,6 +2215,7 @@ ImGuiListClipper::ImGuiListClipper(int items_count, float items_height)
     DisplayStart = DisplayEnd = 0;
     ItemsCount = -1;
     StepNo = 0;
+    ItemsFrozen = 0;
     ItemsHeight = StartPosY = 0.0f;
     Begin(items_count, items_height);
 }
@@ -2239,6 +2240,7 @@ void ImGuiListClipper::Begin(int items_count, float items_height)
     StartPosY = window->DC.CursorPos.y;
     ItemsHeight = items_height;
     ItemsCount = items_count;
+    ItemsFrozen = 0;
     StepNo = 0;
     DisplayStart = -1;
     DisplayEnd = 0;
@@ -2251,7 +2253,7 @@ void ImGuiListClipper::End()
 
     // In theory here we should assert that ImGui::GetCursorPosY() == StartPosY + DisplayEnd * ItemsHeight, but it feels saner to just seek at the end and not assert/crash the user.
     if (ItemsCount < INT_MAX && DisplayStart >= 0)
-        SetCursorPosYAndSetupForPrevLine(StartPosY + ItemsCount * ItemsHeight, ItemsHeight);
+        SetCursorPosYAndSetupForPrevLine(StartPosY + (ItemsCount - ItemsFrozen) * ItemsHeight, ItemsHeight);
     ItemsCount = -1;
     StepNo = 3;
 }
@@ -2275,12 +2277,22 @@ bool ImGuiListClipper::Step()
     // Step 0: Let you process the first element (regardless of it being visible or not, so we can measure the element height)
     if (StepNo == 0)
     {
+        // While we are in frozen row state, keep displaying items one by one, unclipped
+        // FIXME: Could be stored as a table-agnostic state.
+        if (table != NULL && !table->IsFreezeRowsPassed)
+        {
+            DisplayStart = ItemsFrozen;
+            DisplayEnd = ItemsFrozen + 1;
+            ItemsFrozen++;
+            return true;
+        }
+
         StartPosY = window->DC.CursorPos.y;
         if (ItemsHeight <= 0.0f)
         {
             // Submit the first item so we can measure its height (generally it is 0..1)
-            DisplayStart = 0;
-            DisplayEnd = 1;
+            DisplayStart = ItemsFrozen;
+            DisplayEnd = ItemsFrozen + 1;
             StepNo = 1;
             return true;
         }
@@ -2321,7 +2333,7 @@ bool ImGuiListClipper::Step()
 
         // Seek cursor
         if (DisplayStart > already_submitted)
-            SetCursorPosYAndSetupForPrevLine(StartPosY + DisplayStart * ItemsHeight, ItemsHeight);
+            SetCursorPosYAndSetupForPrevLine(StartPosY + (DisplayStart - ItemsFrozen) * ItemsHeight, ItemsHeight);
 
         StepNo = 3;
         return true;
@@ -2333,7 +2345,7 @@ bool ImGuiListClipper::Step()
     {
         // Seek cursor
         if (ItemsCount < INT_MAX)
-            SetCursorPosYAndSetupForPrevLine(StartPosY + ItemsCount * ItemsHeight, ItemsHeight); // advance cursor
+            SetCursorPosYAndSetupForPrevLine(StartPosY + (ItemsCount - ItemsFrozen) * ItemsHeight, ItemsHeight); // advance cursor
         ItemsCount = -1;
         return false;
     }
